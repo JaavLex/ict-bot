@@ -56,13 +56,25 @@ bot.on(['/start', '/help', '/h'], (msg) => {
 });
 
 bot.on(['/list', '/all', '/listall'], (msg) => {
-    var messageFinal = '*Voici la liste des différents modules* : \n';
+    var listincr = 0;
+    var messageFinal = "";
+    var headMessage = '*Voici la liste des différents modules* : \n';
+    bot.sendMessage(msg.chat.id, headMessage, {parseMode: 'Markdown'})
     Object.keys(modules).forEach( (el, idx, ary) => {
         if(modules[el].category != 'Non développement d\'applications 2014'){
+          listincr++;
+          if (listincr != 100) {
             messageFinal += '• `' + el + '` - ' + modules[el].name + ' [📄](' + modules[el].link + ')' + '\n';
+          } else {
+            bot.sendMessage(msg.chat.id, messageFinal, {parseMode: 'Markdown'})
+            listincr = 0
+            messageFinal = "";
+            messageFinal += '• `' + el + '` - ' + modules[el].name + ' [📄](' + modules[el].link + ')' + '\n';
+            listincr++;
+          }
         }
     });
-    return bot.sendMessage(msg.chat.id, messageFinal, {parseMode: 'Markdown'});
+    return;
 });
 
 bot.on('/info', (msg) => {
